@@ -1,0 +1,26 @@
+
+.Formulario {
+  margin: 20px 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  .input {
+    background: transparent;
+    font-size: 1.5rem;
+    border: none;
+    outline: none;
+  }
+  .botao {
+    padding: 12px 24px;
+    background: #95bae8;
+    border-radius: 2rem;
+    font-size: 1rem;
+    border: 1px solid #e4bbff8f;
+    cursor: pointer;
+  }
+  .botao:hover {
+    background: #e4bbff8f;
+    border-color: #95bae8;
+  }
+}
