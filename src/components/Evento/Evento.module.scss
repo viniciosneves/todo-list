@@ -1,4 +1,4 @@
-.Tarefa {
+.Evento {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
@@ -11,7 +11,7 @@
   i {
     cursor: pointer;
   }
-  &.completa {
+  &.completo {
     background: #b7ddf33d;
     .descricao {
       text-decoration: line-through;

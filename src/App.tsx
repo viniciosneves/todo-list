@@ -1,43 +1,54 @@
 import React, { useState } from 'react';
 import style from './App.module.scss';
 import Card from './components/Card';
-import Cabecalho from './components/Cabecalho';
 import Formulario from './components/Formulario';
-import ListaDeTarefas from './components/ListaDeTarefas';
-import { ITarefa } from './interfaces/ITarefa';
+import { IEvento } from './interfaces/IEvento';
+import Calendario from './components/Calendario';
+import ListaDeEventos from './components/ListaDeEventos';
 
 function App() {
-  const [tarefas, setTarefas] = useState<ITarefa[]>([])
+  const [eventos, setEventos] = useState<IEvento[]>([])
+  const [filtro, setFiltro] = useState<Date | null>()
 
-  const adicionarTarefa = (descricao: string) => {
-
-    const tarefa = {
-      id: Math.round((new Date()).getTime() / 1000),
-      descricao,
-      completa: false
+  const adicionarEvento = (evento: IEvento) => {
+    evento.id = Math.round((new Date()).getTime() / 1000)
+    eventos.push(evento)
+    setEventos([...eventos])
+  }
+  const alterarStatusEvento = (id: number) => {
+    const evento = eventos.find(evento => evento.id === id)
+    if (evento) {
+      evento.completo = !evento.completo
     }
-    tarefas.push(tarefa)
-    setTarefas([...tarefas])
+    setEventos([...eventos])
   }
-  const alterarStatusTarefa = (id: number) => {
-    const tarefa = tarefas.find(tarefa => tarefa.id === id)
-    if (tarefa) {
-      tarefa.completa = !tarefa.completa
-    }
-    setTarefas([...tarefas])
+  const deletarEvento = (id: number) => {
+    setEventos([...eventos.filter(evento => evento.id !== id)])
   }
-  const deletarTarefa = (id: number) => {
 
-    setTarefas([...tarefas.filter(tarefa => tarefa.id !== id)])
-  }
+  const aplicarFiltro = (data: Date | null) => {
+    setFiltro(data)
+	}
+
+  const filtrados = !filtro
+    ? eventos
+    : eventos.filter((evento) =>
+        filtro!.toISOString().slice(0, 10) === evento.data.toISOString().slice(0, 10)
+      ); 
   
   return (
     <div className={style.App}>
 
       <Card>
-        <Cabecalho tarefas={tarefas}/>
-        <Formulario aoSalvar={adicionarTarefa}/>
-        <ListaDeTarefas aoAlterarStatus={alterarStatusTarefa} aoDeletarTarefa={deletarTarefa} tarefas={tarefas}/>
+        <Formulario aoSalvar={adicionarEvento}/>
+      </Card>
+
+      <Card>
+        <ListaDeEventos aoFiltroAplicado={aplicarFiltro} aoAlterarStatus={alterarStatusEvento} aoDeletarEvento={deletarEvento} eventos={filtrados}/>
+      </Card>
+      
+      <Card>
+        <Calendario eventos={eventos}/>
       </Card>
      
     </div>
