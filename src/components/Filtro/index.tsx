@@ -15,7 +15,7 @@ const Filtro: React.FC<{ aoFiltroAplicado: (data: Date | null) => void }> = ({ a
   }
 
   return (<form className={style.Filtro} onSubmit={submeterForm}>
-    <h3>Filtrar por data</h3>
+    <h3 className={style.titulo}>Filtrar por data</h3>
     <input 
       type="date" 
       name="data"

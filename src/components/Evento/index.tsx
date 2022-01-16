@@ -17,7 +17,7 @@ const Evento: React.FC<{ evento: IEvento, aoAlterarStatus: (id: number) => void,
 
     <EventoCheckbox evento={evento} aoAlterarStatus={aoAlterarStatus}/>
     <div className="cards-info">
-      <h3 className={style.descricao}>{evento.descricao} - {evento.data.toLocaleDateString()}</h3>
+      <h3 className={style.descricao}>{evento.descricao} - {evento.inicio.toLocaleDateString()}</h3>
     </div>
     <i className="far fa-times-circle fa-2x" onClick={() => aoDeletarEvento(evento.id!)}></i>
   </div>)
