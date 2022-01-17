@@ -31,7 +31,7 @@ const Calendario: React.FC = () => {
       inicio: new Date(eventoAlterado.startAt),
       fim: new Date(eventoAlterado.endAt),
       descricao: eventoAlterado.summary,
-      completo: eventos.find(evt => evt.id === eventoAlterado.id)!.completo
+      completo: eventos.find(evt => evt.id === eventoAlterado.id)?.completo ?? false
     })
   };
 
@@ -45,7 +45,7 @@ const Calendario: React.FC = () => {
       startAt: evento.inicio.toISOString(),
       endAt: evento.fim.toISOString(),
       summary: evento.descricao,
-      color: 'blue'
+      color: 'blue',
     })
   })
   return (
