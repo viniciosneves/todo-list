@@ -1,10 +1,12 @@
 
 import React from 'react'
-import { IEvento } from '../../interfaces/IEvento';
 import style from './Calendario.module.scss';
 import ptBR from './localizacao/ptBR.json'
-import Kalend, { CalendarView } from 'kalend'
+import Kalend, { CalendarEvent, CalendarView, OnEventDragFinish } from 'kalend'
 import 'kalend/dist/styles/index.css';
+import { useRecoilValue } from 'recoil';
+import useAtualizarEvento from '../../state/hooks/useAtualizarEvento';
+import { eventosFiltradosState } from '../../state/selectors';
 
 interface IKalendEvento {
   id?: number
@@ -14,9 +16,24 @@ interface IKalendEvento {
   color: string
 }
 
-const Calendario: React.FC<{ eventos: IEvento[] }> = ({ eventos }) => {
+const Calendario: React.FC = () => {
 
+  const eventos = useRecoilValue(eventosFiltradosState);
   const eventosKalend = new Map<string, IKalendEvento[]>();
+  const atualizarEvento = useAtualizarEvento()
+
+  const onEventDragFinish: OnEventDragFinish = (
+    eventoOriginal: CalendarEvent,
+    eventoAlterado: CalendarEvent
+  ) => {
+    atualizarEvento({
+      id: eventoAlterado.id,
+      inicio: new Date(eventoAlterado.startAt),
+      fim: new Date(eventoAlterado.endAt),
+      descricao: eventoAlterado.summary,
+      completo: eventos.find(evt => evt.id === eventoAlterado.id)!.completo
+    })
+  };
 
   eventos.forEach(evento => {
     const chave = evento.inicio.toISOString().slice(0, 10)
@@ -43,6 +60,7 @@ const Calendario: React.FC<{ eventos: IEvento[] }> = ({ eventos }) => {
         calendarIDsHidden={['work']}
         language={'customLanguage'}
         customLanguage={ptBR}
+        onEventDragFinish={onEventDragFinish}
       />
     </div>
   );

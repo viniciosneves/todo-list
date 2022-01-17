@@ -1,27 +1,37 @@
 import React, { useState } from 'react';
-import { IEvento } from '../../interfaces/IEvento';
+import useAdicionarEvento from '../../state/hooks/useAdicionarEvento';
+import { obterId } from '../../utils';
 import style from './Formulario.module.scss';
 
-const Formulario: React.FC<{ aoSalvar: (evento: IEvento) => void }> = ({ aoSalvar }) => {
+const Formulario: React.FC = () => {
+  
   const [descricao, setDescricao] = useState('')
   const [dataInicio, setDataInicio] = useState('')
   const [horaInicio, setHoraInicio] = useState('')
   const [dataFim, setDataFim] = useState('')
   const [horaFim, setHoraFim] = useState('')
 
+  const salvarEvento = useAdicionarEvento()
+
+
   const montarData = (data:string, hora: string) => {
     const dataString = data.slice(0, 10)
     return new Date(`${dataString}T${hora}`)
   }
 
+
   const submeterForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    aoSalvar({
+    const novoEvento = {
       descricao,
       inicio: montarData(dataInicio, horaInicio),
       fim: montarData(dataFim, horaFim),
-      completo: false
-    })
+      completo: false,
+      id: obterId()
+    }
+
+    salvarEvento(novoEvento);
+
     setDescricao('')
     setDataInicio('')
     setHoraInicio('')
