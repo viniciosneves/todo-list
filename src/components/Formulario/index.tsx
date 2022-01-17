@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useResetRecoilState } from 'recoil';
+import { listaEventosState } from '../../state/atom';
 import useAdicionarEvento from '../../state/hooks/useAdicionarEvento';
 import { obterId } from '../../utils';
 import style from './Formulario.module.scss';
@@ -10,9 +12,9 @@ const Formulario: React.FC = () => {
   const [horaInicio, setHoraInicio] = useState('')
   const [dataFim, setDataFim] = useState('')
   const [horaFim, setHoraFim] = useState('')
+  const limparEstado = useResetRecoilState(listaEventosState)
 
   const salvarEvento = useAdicionarEvento()
-
 
   const montarData = (data:string, hora: string) => {
     const dataString = data.slice(0, 10)
@@ -90,6 +92,10 @@ const Formulario: React.FC = () => {
 
     <button className={style.botao}>
       Salvar
+    </button>
+
+    <button className={style.botao} type='button' onClick={limparEstado}>
+      Limpar estado
     </button>
 
   </form>)
