@@ -21,7 +21,6 @@ const Formulario: React.FC = () => {
     return new Date(`${dataString}T${hora}`)
   }
 
-
   const submeterForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const novoEvento = {
@@ -32,16 +31,25 @@ const Formulario: React.FC = () => {
       id: obterId()
     }
 
-    salvarEvento(novoEvento);
+    try {     
 
-    setDescricao('')
-    setDataInicio('')
-    setHoraInicio('')
-    setDataFim('')
-    setHoraFim('')
+      salvarEvento(novoEvento);
+      setDescricao('')
+      setDataInicio('')
+      setHoraInicio('')
+      setDataFim('')
+      setHoraFim('')
+
+    } catch (error) {
+      alert(error)
+    }
+
   }
   return (<form className={style.Formulario} onSubmit={submeterForm}>
-    <h3 className={style.titulo}>Novo evento</h3>
+    <div className={style.cabecalho}>
+      <h3 className={style.titulo}>Novo evento</h3>
+      <i onClick={limparEstado} className="fas fa-eraser fa-2x"></i>
+    </div>
 
     <label>Descrição</label>
     <input 
@@ -94,9 +102,9 @@ const Formulario: React.FC = () => {
       Salvar
     </button>
 
-    <button className={style.botao} type='button' onClick={limparEstado}>
+    {/* <button className={style.botao} type='button' onClick={limparEstado}>
       Limpar estado
-    </button>
+    </button> */}
 
   </form>)
 }

@@ -1,12 +1,11 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import { eventosFiltradosState } from '../../state/selectors';
+import useListaDeEventosFiltrados from '../../state/hooks/useListaDeEventosFiltrados';
 import Evento from '../Evento';
 import Filtro from '../Filtro';
 import style from './ListaDeEventos.module.scss';
 
 const ListaDeEventos: React.FC = () => {
-  const eventos = useRecoilValue(eventosFiltradosState);
+  const eventos = useListaDeEventosFiltrados();
 
   return (<section>
     <Filtro />
