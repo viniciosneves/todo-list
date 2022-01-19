@@ -40,8 +40,15 @@
     position: relative;
     vertical-align: top;
   }
+  .cabecalho {
+    display: flex;
+    justify-content: space-between;
+  }
   .titulo {
     margin-top: 0;
+  }
+  i {
+    cursor: pointer;
   }
   .botao {
     padding: 12px 24px;

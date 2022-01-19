@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-import { IEvento } from '../../interfaces/IEvento';
+import { useResetRecoilState } from 'recoil';
+import { listaEventosState } from '../../state/atom';
+import useAdicionarEvento from '../../state/hooks/useAdicionarEvento';
+import { obterId } from '../../utils';
 import style from './Formulario.module.scss';
 
-const Formulario: React.FC<{ aoSalvar: (evento: IEvento) => void }> = ({ aoSalvar }) => {
+const Formulario: React.FC = () => {
+  
   const [descricao, setDescricao] = useState('')
   const [dataInicio, setDataInicio] = useState('')
   const [horaInicio, setHoraInicio] = useState('')
   const [dataFim, setDataFim] = useState('')
   const [horaFim, setHoraFim] = useState('')
+  const limparEstado = useResetRecoilState(listaEventosState)
+
+  const salvarEvento = useAdicionarEvento()
 
   const montarData = (data:string, hora: string) => {
     const dataString = data.slice(0, 10)
@@ -16,20 +23,33 @@ const Formulario: React.FC<{ aoSalvar: (evento: IEvento) => void }> = ({ aoSalva
 
   const submeterForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    aoSalvar({
+    const novoEvento = {
       descricao,
       inicio: montarData(dataInicio, horaInicio),
       fim: montarData(dataFim, horaFim),
-      completo: false
-    })
-    setDescricao('')
-    setDataInicio('')
-    setHoraInicio('')
-    setDataFim('')
-    setHoraFim('')
+      completo: false,
+      id: obterId()
+    }
+
+    try {     
+
+      salvarEvento(novoEvento);
+      setDescricao('')
+      setDataInicio('')
+      setHoraInicio('')
+      setDataFim('')
+      setHoraFim('')
+
+    } catch (error) {
+      alert(error)
+    }
+
   }
   return (<form className={style.Formulario} onSubmit={submeterForm}>
-    <h3 className={style.titulo}>Novo evento</h3>
+    <div className={style.cabecalho}>
+      <h3 className={style.titulo}>Novo evento</h3>
+      <i onClick={limparEstado} className="fas fa-eraser fa-2x"></i>
+    </div>
 
     <label>Descrição</label>
     <input 
@@ -81,6 +101,10 @@ const Formulario: React.FC<{ aoSalvar: (evento: IEvento) => void }> = ({ aoSalva
     <button className={style.botao}>
       Salvar
     </button>
+
+    {/* <button className={style.botao} type='button' onClick={limparEstado}>
+      Limpar estado
+    </button> */}
 
   </form>)
 }
